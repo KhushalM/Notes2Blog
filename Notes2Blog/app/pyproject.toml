@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "notes2blog"
+version = "0.1.0"
+description = "Notes → Blog: LangGraph + DSPy backend scaffold"
+authors = ["Your Name <you@example.com>"]
+
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.13"
+fastapi = "^0.112"
+uvicorn = {extras=["standard"], version="^0.30"}
+python-multipart = "^0.0.9"
+pydantic = "^2.8"
+pydantic-settings = "^2.4"
+Pillow = "^10.4"
+rich = "^13.7"
+tenacity = "^9.0"
+
+
+# AI stack
+langgraph = "^0.2.37"
+dspy-ai = "^2.5.11"
+openai = "^1.50"
+
+
+# OCR option
+pytesseract = "^0.3.10"
+opencv-python-headless = "^4.10"
+
+
+# Dev & tests
+pytest = "^8.3"
+black = "^24.8"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

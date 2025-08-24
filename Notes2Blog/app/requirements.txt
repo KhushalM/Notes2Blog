@@ -1,0 +1,30 @@
+# Web framework
+fastapi>=0.112,<1.0
+uvicorn[standard]>=0.30,<1.0
+python-multipart>=0.0.9,<1.0
+pydantic>=2.8,<3.0
+pydantic-settings>=2.4,<3.0
+
+# Image processing
+Pillow>=10.4,<11.0
+
+# Utilities
+rich>=13.7,<14.0
+tenacity>=9.0,<10.0
+
+# AI stack
+langgraph>=0.2.37,<1.0
+dspy-ai>=2.5.11,<3.0
+openai>=1.50,<2.0
+
+# OCR option
+pytesseract>=0.3.10,<1.0
+opencv-python-headless>=4.10,<5.0
+
+# Dev & tests
+pytest>=8.3,<9.0
+black>=24.8,<25.0
+
+# Base64
+base64>=0.5.1,<1.0
+cv2>=4.10,<5.0

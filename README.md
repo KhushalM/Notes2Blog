@@ -154,41 +154,6 @@ The frontend UI will be available at `http://localhost:5173`
 - **Step-by-step**: "How do I implement this process?" (formatted as steps)
 - **Conversational**: "Hello, how are you?" (doesn't trigger retrieval)
 
-## API Endpoints
-
-### Upload PDFs
-
-```bash
-POST http://localhost:8000/pdf_upload
-Content-Type: multipart/form-data
-
-# Upload multiple PDFs
-curl -X POST "http://localhost:8000/pdf_upload" \
-  -F "pdf_files=@document1.pdf" \
-  -F "pdf_files=@document2.pdf"
-```
-
-### Query Processing
-
-```bash
-POST http://localhost:8000/query_processing
-Content-Type: application/json
-
-{
-  "query": "What are the main topics discussed?",
-  "session_id": "default",
-  "retrieval_mode": "hybrid",
-  "temperature": 0.7,
-  "max_tokens": 500
-}
-```
-
-### Health Check
-
-```bash
-GET http://localhost:8000/health
-```
-
 ## Project Structure
 
 ```

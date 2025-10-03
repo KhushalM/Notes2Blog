@@ -272,19 +272,6 @@ sequenceDiagram
     end
 ```
 
-**Key Steps:**
-1. **File Check**: Verify if PDF already uploaded to avoid duplicates
-2. **Text Extraction**: Use PyMuPDF to extract text from all pages
-3. **Sentence Splitting**: Break text into sentences using regex patterns
-4. **Sentence Embeddings**: Generate embeddings for each sentence via Mistral API
-5. **Cosine Similarity**: Calculate semantic similarity between consecutive sentences
-6. **Semantic Gluing**: Merge similar sentences (threshold > 0.7) up to max chunk size (2000 chars)
-7. **Chunk Filtering**: Ensure chunks meet size constraints (100-2000 chars)
-8. **Chunk Embeddings**: Generate final embeddings for semantic chunks
-9. **Metadata Creation**: Attach filename, index, size, and path to each chunk
-10. **Vector DB Storage**: Normalize vectors and store in custom database
-11. **BM25 Index**: Build lexical search index with tokenization and word frequencies
-
 ### Query Processing Pipeline
 
 The following diagram shows the complete RAG query processing flow with safety checks, intelligent routing, and hallucination detection:
@@ -385,55 +372,13 @@ sequenceDiagram
     end
 ```
 
-**Key Steps:**
-1. **Session Init**: Create or retrieve chat memory for session_id
-2. **Vector DB Check**: Ensure at least one PDF uploaded
-3. **Safety Check**: Refuse PII queries, add disclaimers for legal/medical
-4. **Query Analysis**: Determine if KB search needed + transform query with context
-5. **Direct Answer**: Use Mistral LLM (mistral-small-2503) for conversational queries
-6. **Query Embedding**: Generate vector representation for retrieval queries
-7. **Hybrid Search**: Combine semantic (65%) + BM25 (35%), filter by 0.5 threshold
-8. **Insufficient Evidence**: Refuse to answer if no results meet threshold
-9. **Reranking**: LLM-based reranking of retrieved documents
-10. **Answer Generation**: Create RAG prompt with sources, generate with mistral-large-latest
-11. **Hallucination Check**: Verify claims against retrieved context
-12. **Response**: Return answer with sources and unverified claims report
-
 ## Key Design Decisions
 
 ### Semantic Chunking
-- Splits text into sentences and analyzes semantic similarity between consecutive sentences
-- Merges similar sentences (cosine similarity > 0.7) into coherent chunks
-- Maintains chunk size between 100-2000 characters for optimal retrieval
+- Splits text into sentences, measures cosine similarity between consecutive sentences
+- Merges similar sentences (threshold > 0.7) into coherent chunks
+- Maintains chunk size: 100-2000 characters for optimal retrieval
 
 ### Hybrid Search
-- **65% semantic weight**: Vector similarity for conceptual matching
-- **35% lexical weight**: BM25 for exact keyword matching
-- Minimum similarity threshold (0.5) to ensure quality results
-
-### Query Processing Pipeline
-1. **Query Refusal**: Check for PII, legal/medical queries
-2. **Query Routing**: Detect if retrieval is needed
-3. **Keeps recent memory in context**: Keeps the past 3 chat conversations in context to better align the answer
-4. **Query Transformation**: Add keywords, resolve context, detect output format like list
-5. **Retrieval**: Hybrid search across knowledge base (Semantic + BM25)
-6. **Reranking**: LLM reranks the top retreived sources to improve generation
-7. **Refuse to answer**: If not enough evidence is found in the top-k sources, the agent refuses to answer without evidence
-8. **Generation**: Create answer with sourced citations
-9. **Hallucination Check**: Verify claims against context
-
-## Troubleshooting
-
-### Backend won't start
-- Check Python version: `python --version` (should be 3.11+)
-- Verify virtual environment is activated
-- Ensure `.env` file exists with valid API key
-
-### Frontend won't start
-- Check Node version: `node --version` (should be 18+)
-- Clear node_modules: `rm -rf node_modules && npm install`
-
-### Mistral API Errors
-- If you see "service_tier_capacity_exceeded", the API is overloaded - wait a few moments
-- If you see "rate_limit", you've exceeded the rate limit - wait before retrying
-- Consider using your own Mistral API key if the provided one is not working
+- **65% semantic** (vector similarity) + **35% lexical** (BM25)
+- Minimum similarity threshold: 0.5 to ensure quality results
